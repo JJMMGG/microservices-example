@@ -1,0 +1,56 @@
+spring:
+  application:
+    name: service-one
+  #--------------Mysql-config-------------#
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    #url: jdbc:mysql://127.0.0.1:3306/service_one?createDatabaseIfNotExist=true
+    url: jdbc:mysql://mysqldb:3306/service_one?createDatabaseIfNotExist=true
+    username: root
+    password: secret
+  jpa:
+    hibernate.ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  #----------rabittmq config-------------#
+  rabbitmq:
+    host: rabbitmq
+    #host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  #-----------consul config--------------#
+  cloud:
+    consul:
+      #host: localhost
+      host: badger
+      port: 8500
+      discovery:
+        hostName: service-one
+        instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
+        heartbeat:
+          enabled: true
+          ttl: 10s
+        metadata:
+          node-name: ${spring.application.name}@
+        scheme: https
+          #anotherfield: anothervalue
+    loadbalancer.ribbon.enabled: false
+
+server:
+  error:
+    include-message: always
+  port: 8084
+
+logging:
+  file:
+    name: "./home/service-one-application.log"
+  pattern:
+    file: "%d %-5level [%thread] %logger{0}: %msg%n"
+  level:
+    org:
+      springframework:
+        web: DEBUG
+      hibernate: WARN
