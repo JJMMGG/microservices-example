@@ -1,0 +1,52 @@
+spring:
+  application:
+    name: service-two
+  #------------Mongo config----------#
+  data:
+    mongodb:
+      #host: 127.0.0.1
+      host: mongodb
+      port: 27017
+      authentication-database: admin
+      database: service_two
+      username: juan
+      password: password1234
+  #----------rabittmq config-------------#
+  rabbitmq:
+    host: rabbitmq
+    #host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  #-----------consul config--------------#
+  cloud:
+    consul:
+      #host: localhost
+      host: badger
+      port: 8500
+      discovery:
+        hostName: service-two
+        instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
+        heartbeat:
+          enabled: true
+          ttl: 10s
+        metadata:
+          node-name: ${spring.application.name}@
+        scheme: https
+    loadbalancer.ribbon.enabled: false
+
+server:
+  error:
+    include-message: always
+  port: 8082
+#-----------logstash config-------------#
+logging:
+  file:
+    name: "./home/service-two-application.log"
+  pattern:
+    file: "%d %-5level [%thread] %logger{0}: %msg%n"
+  level:
+    org:
+      springframework:
+        web: DEBUG
+      hibernate: WARN
