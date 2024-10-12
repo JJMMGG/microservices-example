@@ -1,0 +1,112 @@
+services:
+  ###################
+  #Api gateway
+  ###################
+  api-gateway:
+    image: devopsfaith/krakend:2.7
+    ports:
+      - 8080:8080
+    volumes:
+      - ../config/krakend:/etc/krakend/
+    networks:
+      - backend  
+  ###################
+  #Discovery service
+  ###################
+  consul:
+    image: hashicorp/consul:1.19
+    ports:
+      - 8500:8500
+      - 8600:8600/udp
+    container_name: badger
+    command: [ "agent", "-server", "-node=server-1", "-bootstrap-expect=1", "-client=0.0.0.0","-bind={{ GetInterfaceIP \"eth0\" }}", "-ui" ]
+    networks:
+      - backend
+  ###################
+  #Service one
+  ###################
+  service-one:
+    container_name: "service-one"
+    hostname: "service-one"
+    build:
+      context: ../service-one
+    ports:
+      - 8084:8084
+    depends_on:
+      - mysqldb
+      - rabbitmq
+    networks:
+      - backend
+    restart: on-failure
+  ###################
+  #Service one db
+  ###################
+  mysqldb:
+    image: mysql:8.4.2
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: service_one
+      MYSQL_USER: service-one
+      MYSQL_USER_PASSWORD: service-one
+    networks:
+      - backend
+    #volumes:
+    #    - ./data:/var/lib/mysql
+
+  ###################
+  #Service two
+  ###################
+  service-two:
+    container_name: "service-two"
+    hostname: "service-two"
+    build:
+      context: ../service-two
+    ports:
+      - 8082:8082
+    depends_on:
+      - mongodb
+      - rabbitmq
+    networks:
+      - backend
+    restart: on-failure
+
+  ###################
+  #Service two db
+  ###################
+  mongodb:
+    image: mongodb/mongodb-community-server:7.0.9-ubi9
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: juan
+      MONGO_INITDB_ROOT_PASSWORD: password1234
+      MONGO_INITDB_DATABASE: service_two
+    networks:
+      - backend
+    #volumes:
+    #  - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    #  - ./data:/data/db:rw
+
+  ###################
+  #Broker queue
+  ###################
+  rabbitmq:
+    image: rabbitmq:4.0.0-rc.1-management-alpine
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    #volumes:
+    #  - ./config/rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins:ro
+    #  - ./config/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+    networks:
+      - backend
+    restart: on-failure
+
+networks:
+  backend:
+    driver: bridge
