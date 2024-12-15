@@ -23,7 +23,7 @@
     },
     "endpoints": [
         {
-            "endpoint": "/homest",
+            "endpoint": "/service_two/messages",
             "method": "GET",
             "backend": [
                 {
@@ -40,11 +40,45 @@
             ]
         },
         {
-            "endpoint": "/homeso",
+            "endpoint": "/service_two/received",
+            "method": "GET",
+            "backend": [
+                {
+                    "url_pattern": "/service-two/received",
+                    "sd": "dns",
+                    "is_collection": true,
+                    "sd_scheme": "http",
+                    "encoding": "json",
+                    "host": [
+                        "service-two.service.consul"
+                    ],
+                    "disable_host_sanitize": true
+                }
+            ]
+        },
+        {
+            "endpoint": "/service_one/messages",
             "method": "GET",
             "backend": [
                 {
                     "url_pattern": "/service-one/messages",
+                    "sd": "dns",
+                    "is_collection": true,
+                    "sd_scheme": "http",
+                    "encoding": "json",
+                    "host": [
+                        "service-one.service.consul"
+                    ],
+                    "disable_host_sanitize": true
+                }
+            ]
+        },
+        {
+            "endpoint": "/service_one/received",
+            "method": "GET",
+            "backend": [
+                {
+                    "url_pattern": "/service-one/received",
                     "sd": "dns",
                     "is_collection": true,
                     "sd_scheme": "http",
