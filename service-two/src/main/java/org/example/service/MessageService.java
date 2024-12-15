@@ -32,6 +32,10 @@ public class MessageService {
         return messageRepository.findByName(appName);
     }
 
+    public List<Message> getRecMessages(String appName){
+        return messageRepository.findReceivedMessages(appName);
+    }
+
     public void addMessage(Message message) {
         messageRepository.save(message);
     }
@@ -40,7 +44,7 @@ public class MessageService {
         addMessage(message);
     }
 
-    @Scheduled(fixedDelay = 60000, initialDelay = 30000)
+    @Scheduled(fixedDelay = 60000, initialDelay = 60000)
     public void generateMessage(){
         String value = UUID.randomUUID().toString();
         Message toSend = new Message(appName, value, Date.from(Instant.now()));

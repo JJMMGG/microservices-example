@@ -12,4 +12,7 @@ public interface MessageRepository extends MongoRepository<Message, String> {
 
     @Query("{'name' : ?0}")
     List<Message> findByName(String appName);
+
+    @Query("{'name' : {$ne : ?0}}")
+    List<Message> findReceivedMessages(String appName);
 }

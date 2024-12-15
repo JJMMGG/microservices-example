@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping(path = "/")
@@ -28,4 +30,10 @@ public class MessageController {
     public List<Message> getMessages(){
         return messageService.getMessages(appName);
     }
+
+    @GetMapping(path = "/service-two/received")
+    public List<Message> getRecMessages() {
+        return messageService.getRecMessages(appName);
+    }
+    
 }

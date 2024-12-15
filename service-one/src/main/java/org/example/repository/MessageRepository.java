@@ -12,4 +12,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     @Query("SELECT m FROM Message m where m.name= ?1")
     List<Message> findByName(String name);
+
+    @Query("SELECT m FROM Message m where m.name != ?1")
+    List<Message> findReceivedMessages(String name);
 }
