@@ -1,3 +1,4 @@
 service-one/target/
 service-two/target/
 build/.env
+.vscode
