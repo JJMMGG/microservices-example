@@ -11,7 +11,9 @@ RUN mvn clean package -DskipTests
 FROM openjdk:24-jdk
 # Set the working directory in the container
 WORKDIR /app
+# Create dir for logs
+RUN mkdir /logs
 # Copy the built JAR file from the previous stage to the container
-COPY --from=build /app/target/service_two-1.0-release.jar ./
+COPY --from=build /app/target/service-two-1.0-release.jar ./
 # Set the command to run the application
-CMD ["java", "-jar", "service_two-1.0-release.jar"]
+CMD ["java", "-jar", "service-two-1.0-release.jar"]

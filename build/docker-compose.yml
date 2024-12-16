@@ -49,7 +49,7 @@ services:
     ports:
       - 8084:8084
     volumes:
-      - logstashingestdata:/app/home/
+      - logstashingestdata:/app/logs
     depends_on:
       - mysqldb
       - rabbitmq
@@ -84,7 +84,7 @@ services:
     ports:
       - 8082:8082
     volumes:
-      - logstashingestdata:/app/home/
+      - logstashingestdata:/app/logs
     depends_on:
       - mongodb
       - rabbitmq

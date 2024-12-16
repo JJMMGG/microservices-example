@@ -42,7 +42,7 @@ server:
 #-----------logstash config-------------#
 logging:
   file:
-    name: "./home/service-two-application.log"
+    name: "./logs/st-app.log"
   pattern:
     file: "%d %-5level [%thread] %logger{0}: %msg%n"
   level:
