@@ -52,7 +52,13 @@ elasticsearch y es visualizada en Kibana.
 
 Kibana: http://localhost:5601/app/kibana
 
+![logs_kibana](documentation/img/logs_kibana.png)
+
+También puede monitorearse los recursos del sistema con el servidor Metricbean.
+
 ![metricbean](documentation/img/metricbean.png)
+
+![metric_graphics](documentation/img/metric_graphics.png)
 
 ### Comunicación Asíncrona 
 
